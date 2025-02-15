@@ -1,0 +1,16 @@
+server:
+  port: 5454
+
+spring:
+  application:
+    name: Online-Food-Ordering
+  datasource:
+    url: "jdbc:mysql://localhost:3308/online-food-order"
+    driver: "com.mysql.cj.jdbc.Driver"
+    username: root
+    password: buicuong2003
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    format-sql: true

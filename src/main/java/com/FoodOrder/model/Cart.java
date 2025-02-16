@@ -24,5 +24,5 @@ public class Cart {
     Long total;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "cart")
-    List<CartItem> items = new ArrayList<>();
+    List<CartItem> cartItems = new ArrayList<>();
 }

@@ -8,7 +8,7 @@ import com.FoodOrder.request.CreateFoodRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,7 +31,7 @@ public class FoodServiceImp implements  FoodService{
                 .ingredientsItems(request.getIngredientsItems())
                 .isSeasonal(request.isSeasional())
                 .isVegetarian(request.isVegetarian())
-                .creationDate(LocalDateTime.now())
+                .creationDate(new Date())
                 .build();
         Food saveFood = foodRepository.save(food);
 

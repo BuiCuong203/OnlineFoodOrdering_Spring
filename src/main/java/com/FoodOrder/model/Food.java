@@ -1,12 +1,12 @@
 package com.FoodOrder.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -33,6 +33,7 @@ public class Food {
 
     boolean available;
 
+    @JsonIgnore
     @ManyToOne
     Restaurant restaurant;
 
@@ -42,5 +43,5 @@ public class Food {
     @ManyToMany
     List<IngredientsItem> ingredientsItems = new ArrayList<>();
 
-    LocalDateTime creationDate;
+    Date creationDate;
 }

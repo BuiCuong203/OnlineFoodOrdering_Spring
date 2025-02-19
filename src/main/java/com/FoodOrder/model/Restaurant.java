@@ -35,6 +35,7 @@ public class Restaurant {
 
     String openingHours;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "restaurant")
     List<Order> orders = new ArrayList<>();
 

@@ -47,7 +47,8 @@ public class CartController {
             @RequestHeader("Authorization") String jwt,
             @PathVariable Long id
     ) throws Exception {
-        Cart cart = cartService.removeItemFromCart(id, jwt);
+        User user = userService.findUserByJwtToken(jwt);
+        Cart cart = cartService.removeItemFromCart(id, user);
 
         return new ResponseEntity<>(cart, HttpStatus.OK);
     }

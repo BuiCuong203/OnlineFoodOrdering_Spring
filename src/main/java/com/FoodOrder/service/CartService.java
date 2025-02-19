@@ -2,6 +2,7 @@ package com.FoodOrder.service;
 
 import com.FoodOrder.model.Cart;
 import com.FoodOrder.model.CartItem;
+import com.FoodOrder.model.User;
 import com.FoodOrder.request.AddCartItemRequest;
 
 public interface CartService {
@@ -9,7 +10,7 @@ public interface CartService {
 
     public CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws  Exception;
 
-    public Cart removeItemFromCart(Long cartItemId, String jwt) throws Exception;
+    public Cart removeItemFromCart(Long cartItemId, User user) throws Exception;
 
     public Long calculateCartTotals(Cart cart) throws  Exception;
 

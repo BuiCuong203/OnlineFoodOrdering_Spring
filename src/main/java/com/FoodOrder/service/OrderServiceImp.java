@@ -6,10 +6,7 @@ import com.FoodOrder.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,6 +54,8 @@ public class OrderServiceImp implements OrderService{
             OrderItem savedOrderItem = orderItemRepository.save(orderItem);
             orderItems.add(savedOrderItem);
         }
+
+        cartService.clearCart(user.getId());
 
         Long totalPrice = cart.getTotal();
 

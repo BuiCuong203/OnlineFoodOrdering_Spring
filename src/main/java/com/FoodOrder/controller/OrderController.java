@@ -1,17 +1,17 @@
 package com.FoodOrder.controller;
 
-import com.FoodOrder.model.CartItem;
-import com.FoodOrder.model.Order;
-import com.FoodOrder.model.User;
-import com.FoodOrder.request.OrderRequest;
-import com.FoodOrder.service.OrderService;
-import com.FoodOrder.service.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.FoodOrder.model.Order;
+import com.FoodOrder.model.User;
+import com.FoodOrder.request.OrderRequest;
+import com.FoodOrder.service.OrderService;
+import com.FoodOrder.service.UserService;
 
 @RestController
 @RequestMapping("/api")
@@ -25,9 +25,7 @@ public class OrderController {
 
     @PostMapping("/order")
     public ResponseEntity<Order> createOrder(
-            @RequestHeader("Authorization") String jwt,
-            @RequestBody OrderRequest request
-            ) throws Exception {
+            @RequestHeader("Authorization") String jwt, @RequestBody OrderRequest request) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
         Order order = orderService.createOrder(request, user);
 
@@ -35,9 +33,7 @@ public class OrderController {
     }
 
     @GetMapping("/order/user")
-    public ResponseEntity<List<Order>> getOrderHistory(
-            @RequestHeader("Authorization") String jwt
-    ) throws Exception {
+    public ResponseEntity<List<Order>> getOrderHistory(@RequestHeader("Authorization") String jwt) throws Exception {
         User user = userService.findUserByJwtToken(jwt);
         List<Order> orders = orderService.getOrderUser(user.getId());
 

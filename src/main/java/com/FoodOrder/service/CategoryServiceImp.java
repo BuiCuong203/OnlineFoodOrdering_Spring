@@ -1,16 +1,17 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.model.Category;
-import com.FoodOrder.model.Restaurant;
-import com.FoodOrder.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.FoodOrder.model.Category;
+import com.FoodOrder.model.Restaurant;
+import com.FoodOrder.repository.CategoryRepository;
+
 @Service
-public class CategoryServiceImp implements CategoryService{
+public class CategoryServiceImp implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -21,10 +22,7 @@ public class CategoryServiceImp implements CategoryService{
     @Override
     public Category createCategory(String name, Long userId) throws Exception {
         Restaurant restaurant = restaurantService.getRestaurantByUserId(userId);
-        Category category = Category.builder()
-                .name(name)
-                .restaurant(restaurant)
-                .build();
+        Category category = Category.builder().name(name).restaurant(restaurant).build();
 
         return categoryRepository.save(category);
     }
@@ -40,7 +38,7 @@ public class CategoryServiceImp implements CategoryService{
     public Category findCategoryById(Long id) throws Exception {
         Optional<Category> opt = categoryRepository.findById(id);
 
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Category not found");
         }
 

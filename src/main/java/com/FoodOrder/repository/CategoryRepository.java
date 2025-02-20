@@ -1,10 +1,11 @@
 package com.FoodOrder.repository;
 
-import com.FoodOrder.model.Category;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.FoodOrder.model.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {

@@ -1,16 +1,17 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.model.*;
-import com.FoodOrder.repository.*;
-import com.FoodOrder.request.OrderRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.FoodOrder.model.*;
+import com.FoodOrder.repository.*;
+import com.FoodOrder.request.OrderRequest;
+
 @Service
-public class OrderServiceImp implements OrderService{
+public class OrderServiceImp implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -35,7 +36,7 @@ public class OrderServiceImp implements OrderService{
         Address shipAddress = request.getDeliveryAddress();
         Address savedAddress = addressRepository.save(shipAddress);
 
-        if(!user.getAddresses().contains(savedAddress)){
+        if (!user.getAddresses().contains(savedAddress)) {
             user.getAddresses().add(savedAddress);
             userRepository.save(user);
         }
@@ -44,7 +45,7 @@ public class OrderServiceImp implements OrderService{
         Cart cart = cartService.findCartByUserId(user.getId());
         List<OrderItem> orderItems = new ArrayList<>();
 
-        for(CartItem cartItem : cart.getCartItems()){
+        for (CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = OrderItem.builder()
                     .food(cartItem.getFood())
                     .quantity(cartItem.getQuantity())
@@ -77,10 +78,10 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order updateOrder(Long orderId, String orderStatus) throws Exception {
         Order order = findOrderById(orderId);
-        if(orderStatus.equals("OUT_FOR_DELIVERY")
+        if (orderStatus.equals("OUT_FOR_DELIVERY")
                 || orderStatus.equals("DELIVERED")
                 || orderStatus.equals("COMPLETED")
-                || orderStatus.equals("PENDING")){
+                || orderStatus.equals("PENDING")) {
             order.setOrderStatus(orderStatus);
             return orderRepository.save(order);
         }
@@ -102,8 +103,10 @@ public class OrderServiceImp implements OrderService{
     public List<Order> getOrderRestaurant(Long restaurantId, String orderStatus) throws Exception {
         List<Order> orders = orderRepository.findByRestaurantId(restaurantId);
 
-        if(orderStatus != null){
-            orders = orders.stream().filter(order -> order.getOrderStatus().equals(orderStatus)).collect(Collectors.toList());
+        if (orderStatus != null) {
+            orders = orders.stream()
+                    .filter(order -> order.getOrderStatus().equals(orderStatus))
+                    .collect(Collectors.toList());
         }
         return orders;
     }
@@ -111,7 +114,7 @@ public class OrderServiceImp implements OrderService{
     @Override
     public Order findOrderById(Long orderId) throws Exception {
         Optional<Order> opt = orderRepository.findById(orderId);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Order not found");
         }
 

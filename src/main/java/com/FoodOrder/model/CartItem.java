@@ -1,11 +1,13 @@
 package com.FoodOrder.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
+
 import jakarta.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder

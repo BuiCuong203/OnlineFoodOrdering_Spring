@@ -1,5 +1,10 @@
 package com.FoodOrder.service;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.FoodOrder.model.Cart;
 import com.FoodOrder.model.CartItem;
 import com.FoodOrder.model.Food;
@@ -7,13 +12,9 @@ import com.FoodOrder.model.User;
 import com.FoodOrder.repository.CartItemRepository;
 import com.FoodOrder.repository.CartRepository;
 import com.FoodOrder.request.AddCartItemRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
-public class CartServiceImp implements CartService{
+public class CartServiceImp implements CartService {
 
     @Autowired
     private CartRepository cartRepository;
@@ -33,8 +34,8 @@ public class CartServiceImp implements CartService{
         Food food = foodService.findFoodById(request.getFoodId());
         Cart cart = cartRepository.findByCustomerId(user.getId());
 
-        for(CartItem cartItem : cart.getCartItems()){
-            if(cartItem.getFood().equals((food))) {
+        for (CartItem cartItem : cart.getCartItems()) {
+            if (cartItem.getFood().equals((food))) {
                 int quantity = cartItem.getQuantity() + request.getQuantity();
                 return updateCartItemQuantity(cartItem.getId(), quantity);
             }
@@ -57,7 +58,7 @@ public class CartServiceImp implements CartService{
     @Override
     public CartItem updateCartItemQuantity(Long cartItemId, int quantity) throws Exception {
         Optional<CartItem> opt = cartItemRepository.findById(cartItemId);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Cart item not found");
         }
         CartItem cartItem = opt.get();
@@ -72,7 +73,7 @@ public class CartServiceImp implements CartService{
         Cart cart = cartRepository.findByCustomerId(user.getId());
 
         Optional<CartItem> opt = cartItemRepository.findById(cartItemId);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Cart item not found");
         }
         CartItem cartItem = opt.get();
@@ -85,7 +86,7 @@ public class CartServiceImp implements CartService{
     @Override
     public Long calculateCartTotals(Cart cart) throws Exception {
         Long total = 0L;
-        for(CartItem cartItem : cart.getCartItems()){
+        for (CartItem cartItem : cart.getCartItems()) {
             total += cartItem.getQuantity() * cartItem.getFood().getPrice();
         }
 
@@ -95,7 +96,7 @@ public class CartServiceImp implements CartService{
     @Override
     public Cart findCartById(Long id) throws Exception {
         Optional<Cart> opt = cartRepository.findById(id);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Cart not found");
         }
         Cart cart = opt.get();

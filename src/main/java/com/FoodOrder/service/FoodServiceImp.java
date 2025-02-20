@@ -1,20 +1,21 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.model.Category;
-import com.FoodOrder.model.Food;
-import com.FoodOrder.model.Restaurant;
-import com.FoodOrder.repository.FoodRepository;
-import com.FoodOrder.request.CreateFoodRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.FoodOrder.model.Category;
+import com.FoodOrder.model.Food;
+import com.FoodOrder.model.Restaurant;
+import com.FoodOrder.repository.FoodRepository;
+import com.FoodOrder.request.CreateFoodRequest;
+
 @Service
-public class FoodServiceImp implements  FoodService{
+public class FoodServiceImp implements FoodService {
 
     @Autowired
     private FoodRepository foodRepository;
@@ -46,19 +47,20 @@ public class FoodServiceImp implements  FoodService{
     }
 
     @Override
-    public List<Food> getRestaurantsFood(Long restaurantId, boolean isVegetarian, boolean isNonveg, boolean isSeasonal, String category) {
+    public List<Food> getRestaurantsFood(
+            Long restaurantId, boolean isVegetarian, boolean isNonveg, boolean isSeasonal, String category) {
         List<Food> foods = foodRepository.findByRestaurantId(restaurantId);
 
-        if(isVegetarian){
+        if (isVegetarian) {
             foods = filterByVegetarian(foods, isVegetarian);
         }
-        if(isNonveg){
+        if (isNonveg) {
             foods = filterByNonveg(foods, isNonveg);
         }
-        if(isSeasonal){
+        if (isSeasonal) {
             foods = filterBySeasonal(foods, isSeasonal);
         }
-        if(category != null && !category.equals("")){
+        if (category != null && !category.equals("")) {
             foods = filterByCategory(foods, category);
         }
 
@@ -66,12 +68,14 @@ public class FoodServiceImp implements  FoodService{
     }
 
     private List<Food> filterByCategory(List<Food> foods, String category) {
-        return foods.stream().filter(food -> {
-            if(food.getCategory().getName().equals(category)){
-                return true;
-            }
-            return false;
-        }).collect(Collectors.toList());
+        return foods.stream()
+                .filter(food -> {
+                    if (food.getCategory().getName().equals(category)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 
     private List<Food> filterBySeasonal(List<Food> foods, boolean isSeasonal) {
@@ -83,7 +87,9 @@ public class FoodServiceImp implements  FoodService{
     }
 
     private List<Food> filterByVegetarian(List<Food> foods, boolean isVegetarian) {
-        return foods.stream().filter(food -> food.isVegetarian() == isVegetarian).collect(Collectors.toList());
+        return foods.stream()
+                .filter(food -> food.isVegetarian() == isVegetarian)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -94,7 +100,7 @@ public class FoodServiceImp implements  FoodService{
     @Override
     public Food findFoodById(Long foodId) throws Exception {
         Optional<Food> opt = foodRepository.findById(foodId);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Food not exist......");
         }
 

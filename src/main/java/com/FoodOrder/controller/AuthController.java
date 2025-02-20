@@ -1,14 +1,9 @@
 package com.FoodOrder.controller;
 
-import com.FoodOrder.config.JwtProvider;
-import com.FoodOrder.model.Cart;
-import com.FoodOrder.model.USER_ROLE;
-import com.FoodOrder.model.User;
-import com.FoodOrder.repository.CartRepository;
-import com.FoodOrder.repository.UserRepository;
-import com.FoodOrder.request.LoginRequest;
-import com.FoodOrder.response.AuthResponse;
-import com.FoodOrder.service.CustomerUserDetailsService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +17,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.FoodOrder.config.JwtProvider;
+import com.FoodOrder.model.Cart;
+import com.FoodOrder.model.USER_ROLE;
+import com.FoodOrder.model.User;
+import com.FoodOrder.repository.CartRepository;
+import com.FoodOrder.repository.UserRepository;
+import com.FoodOrder.request.LoginRequest;
+import com.FoodOrder.response.AuthResponse;
+import com.FoodOrder.service.CustomerUserDetailsService;
 
 @RestController
 @RequestMapping("/auth")
@@ -48,7 +49,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws Exception {
         User isEmailExist = userRepository.findByEmail(user.getEmail());
-        if(isEmailExist != null){
+        if (isEmailExist != null) {
             throw new Exception("Email is already used with another account");
         }
 
@@ -67,7 +68,8 @@ public class AuthController {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), authorities);
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = jwtProvider.generateToken(authentication);
@@ -82,7 +84,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest request){
+    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest request) {
         String username = request.getEmail();
         String password = request.getPassword();
 
@@ -91,7 +93,8 @@ public class AuthController {
         String jwt = jwtProvider.generateToken(authentication);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        String role = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
+        String role =
+                authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
 
         AuthResponse authResponse = AuthResponse.builder()
                 .jwt(jwt)
@@ -105,11 +108,11 @@ public class AuthController {
     private Authentication authenticate(String username, String password) {
         UserDetails userDetails = customerUserDetailsService.loadUserByUsername(username);
 
-        if(userDetails == null){
+        if (userDetails == null) {
             throw new BadCredentialsException("Invalid username......");
         }
 
-        if(!passwordEncoder.matches(password, userDetails.getPassword())){
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid password......");
         }
 

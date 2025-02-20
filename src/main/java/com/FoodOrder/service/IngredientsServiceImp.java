@@ -1,18 +1,19 @@
 package com.FoodOrder.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.FoodOrder.model.IngredientCategory;
 import com.FoodOrder.model.IngredientsItem;
 import com.FoodOrder.model.Restaurant;
 import com.FoodOrder.repository.IngredientCategoryRepository;
 import com.FoodOrder.repository.IngredientsItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
-public class IngredientsServiceImp implements IngredientsService{
+public class IngredientsServiceImp implements IngredientsService {
 
     @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
@@ -26,10 +27,8 @@ public class IngredientsServiceImp implements IngredientsService{
     @Override
     public IngredientCategory createIngredientCategory(String name, Long restaurantId) throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
-        IngredientCategory ingredientCategory = IngredientCategory.builder()
-                .name(name)
-                .restaurant(restaurant)
-                .build();
+        IngredientCategory ingredientCategory =
+                IngredientCategory.builder().name(name).restaurant(restaurant).build();
 
         return ingredientCategoryRepository.save(ingredientCategory);
     }
@@ -37,7 +36,7 @@ public class IngredientsServiceImp implements IngredientsService{
     @Override
     public IngredientCategory findIngredientCategoryById(Long id) throws Exception {
         Optional<IngredientCategory> opt = ingredientCategoryRepository.findById(id);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Ingredient category not found");
         }
 
@@ -50,7 +49,8 @@ public class IngredientsServiceImp implements IngredientsService{
     }
 
     @Override
-    public IngredientsItem createIngredientsItem(String name, Long restaurantId, Long ingredientCategoryId) throws Exception {
+    public IngredientsItem createIngredientsItem(String name, Long restaurantId, Long ingredientCategoryId)
+            throws Exception {
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
         IngredientCategory ingredientCategory = findIngredientCategoryById(ingredientCategoryId);
         IngredientsItem ingredientsItem = IngredientsItem.builder()
@@ -71,7 +71,7 @@ public class IngredientsServiceImp implements IngredientsService{
     @Override
     public IngredientsItem updateStock(Long id) throws Exception {
         Optional<IngredientsItem> opt = ingredientsItemRepository.findById(id);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("IngredientsItem not found");
         }
         IngredientsItem ingredientsItem = opt.get();

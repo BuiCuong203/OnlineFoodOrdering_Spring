@@ -1,8 +1,8 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.model.Category;
-
 import java.util.List;
+
+import com.FoodOrder.model.Category;
 
 public interface CategoryService {
     public Category createCategory(String name, Long userId) throws Exception;

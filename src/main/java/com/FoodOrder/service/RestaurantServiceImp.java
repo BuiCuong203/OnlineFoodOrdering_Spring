@@ -1,5 +1,12 @@
 package com.FoodOrder.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.FoodOrder.dto.RestaurantDto;
 import com.FoodOrder.model.Address;
 import com.FoodOrder.model.Restaurant;
@@ -8,15 +15,9 @@ import com.FoodOrder.repository.AddressRepository;
 import com.FoodOrder.repository.RestaurantRepository;
 import com.FoodOrder.repository.UserRepository;
 import com.FoodOrder.request.CreateRestaurantRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
-public class RestaurantServiceImp implements RestaurantService{
+public class RestaurantServiceImp implements RestaurantService {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -48,13 +49,13 @@ public class RestaurantServiceImp implements RestaurantService{
     @Override
     public Restaurant updateRestuarant(Long restaurantId, CreateRestaurantRequest updateRestaurant) throws Exception {
         Restaurant restaurant = findRestaurantById(restaurantId);
-        if(restaurant.getCuisineType() != null){
+        if (restaurant.getCuisineType() != null) {
             restaurant.setCuisineType((updateRestaurant.getCuisineType()));
         }
-        if(restaurant.getDescription() != null){
-            restaurant. setDescription(updateRestaurant.getDescription());
+        if (restaurant.getDescription() != null) {
+            restaurant.setDescription(updateRestaurant.getDescription());
         }
-        if(restaurant.getName() != null){
+        if (restaurant.getName() != null) {
             restaurant.setName(updateRestaurant.getName());
         }
 
@@ -81,7 +82,7 @@ public class RestaurantServiceImp implements RestaurantService{
     @Override
     public Restaurant findRestaurantById(Long id) throws Exception {
         Optional<Restaurant> opt = restaurantRepository.findById(id);
-        if(opt.isEmpty()){
+        if (opt.isEmpty()) {
             throw new Exception("Restaurant not found with id " + id);
         }
 
@@ -91,7 +92,7 @@ public class RestaurantServiceImp implements RestaurantService{
     @Override
     public Restaurant getRestaurantByUserId(Long userId) throws Exception {
         Restaurant restaurant = restaurantRepository.findByOwnerId(userId);
-        if(restaurant == null){
+        if (restaurant == null) {
             throw new Exception("Restaurant not found with owner id " + userId);
         }
 
@@ -110,15 +111,15 @@ public class RestaurantServiceImp implements RestaurantService{
                 .build();
 
         boolean isFavourites = false;
-        for(RestaurantDto dto : user.getFavourites()){
-            if(dto.getId().equals(restaurantId)){
+        for (RestaurantDto dto : user.getFavourites()) {
+            if (dto.getId().equals(restaurantId)) {
                 isFavourites = true;
                 break;
             }
         }
-        if(!isFavourites){
+        if (!isFavourites) {
             user.getFavourites().add(restaurantDto);
-        }else{
+        } else {
             user.getFavourites().removeIf(favourite -> favourite.getId().equals(restaurantId));
         }
 

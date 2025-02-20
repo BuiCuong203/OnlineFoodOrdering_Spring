@@ -1,13 +1,14 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.config.JwtProvider;
-import com.FoodOrder.model.User;
-import com.FoodOrder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.FoodOrder.config.JwtProvider;
+import com.FoodOrder.model.User;
+import com.FoodOrder.repository.UserRepository;
+
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,7 +28,7 @@ public class UserServiceImp implements UserService{
     public User findUserByEmail(String email) throws Exception {
         User user = userRepository.findByEmail(email);
 
-        if(user == null){
+        if (user == null) {
             throw new Exception("User not found");
         }
 

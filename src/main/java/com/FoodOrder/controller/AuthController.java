@@ -2,8 +2,16 @@ package com.FoodOrder.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
+import com.FoodOrder.config.JwtConstant;
+import com.FoodOrder.model.InvalidatedToken;
+import com.FoodOrder.repository.InvalidatedTokenRepository;
+import com.FoodOrder.response.MessageResponse;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +35,17 @@ import com.FoodOrder.request.LoginRequest;
 import com.FoodOrder.response.AuthResponse;
 import com.FoodOrder.service.CustomerUserDetailsService;
 
+import javax.crypto.SecretKey;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private InvalidatedTokenRepository invalidatedTokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -103,6 +116,25 @@ public class AuthController {
                 .build();
 
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<MessageResponse> logout(@RequestHeader("Authorization") String jwt){
+        jwt = jwt.substring(7);
+        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+
+        Date expiryTime = claims.getExpiration();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .token(jwt)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+        MessageResponse response =
+                MessageResponse.builder().message("Logout success").build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private Authentication authenticate(String username, String password) {

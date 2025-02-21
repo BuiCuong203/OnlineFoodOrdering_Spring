@@ -4,24 +4,31 @@ import java.io.IOException;
 import java.util.List;
 import javax.crypto.SecretKey;
 
+import com.FoodOrder.repository.InvalidatedTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 public class JwtTokenValidator extends OncePerRequestFilter {
+
+    @Autowired
+    private InvalidatedTokenRepository invalidatedTokenRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -31,6 +38,10 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         // Bearer token
         if (jwt != null) {
             jwt = jwt.substring(7);
+
+            if(invalidatedTokenRepository.existsById(jwt)){
+                throw new BadCredentialsException("invalid token......");
+            }
 
             try {
                 SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());

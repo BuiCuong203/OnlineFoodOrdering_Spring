@@ -23,7 +23,6 @@ public class VNPayUtil {
     private String vnp_ReturnUrl;
     @Value("${payment.vnPay.tmnCode}")
     private String vnp_TmnCode ;
-    @Getter
     @Value("${payment.vnPay.secretKey}")
     private String secretKey;
     @Value("${payment.vnPay.version}")

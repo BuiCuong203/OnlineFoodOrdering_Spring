@@ -14,3 +14,16 @@ spring:
       ddl-auto: update
     show-sql: true
     format-sql: true
+
+jwt:
+  signerKey: "udsygfsduklgfukhgsiudfghfdshfyhg9ptyhfdhgfdguhfdgufhdfdghfdhgfdghfd"
+
+payment:
+  vnPay:
+    url: ${PAY_URL}
+    returnUrl: ${RETURN_URL}
+    tmnCode: ${TMN_CODE}
+    secretKey: ${SECRET_KEY}
+    version: ${VERSION}
+    command: ${COMMAND}
+    orderType: ${ORDER_TYPE}

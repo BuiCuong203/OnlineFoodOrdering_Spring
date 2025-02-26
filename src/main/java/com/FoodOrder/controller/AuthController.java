@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import com.FoodOrder.config.JwtConstant;
 import com.FoodOrder.model.InvalidatedToken;
 import com.FoodOrder.repository.InvalidatedTokenRepository;
 import com.FoodOrder.response.MessageResponse;
@@ -13,6 +12,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -40,6 +40,9 @@ import javax.crypto.SecretKey;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    @Value("${jwt.signerKey}")
+    private String secretKey;
 
     @Autowired
     private UserRepository userRepository;
@@ -118,10 +121,10 @@ public class AuthController {
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/signout")
     public ResponseEntity<MessageResponse> logout(@RequestHeader("Authorization") String jwt){
         jwt = jwt.substring(7);
-        SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
         Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
         Date expiryTime = claims.getExpiration();
@@ -130,10 +133,10 @@ public class AuthController {
                 .token(jwt)
                 .expiryTime(expiryTime)
                 .build();
-
         invalidatedTokenRepository.save(invalidatedToken);
+
         MessageResponse response =
-                MessageResponse.builder().message("Logout success").build();
+                MessageResponse.builder().message("Signout success").build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

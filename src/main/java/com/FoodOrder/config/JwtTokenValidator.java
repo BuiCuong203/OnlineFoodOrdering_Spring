@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,13 +28,16 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenValidator extends OncePerRequestFilter {
 
+    @Value("${jwt.signerKey}")
+    private String secretKey;
+
     @Autowired
     private InvalidatedTokenRepository invalidatedTokenRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String jwt = request.getHeader(JwtConstant.JWT_HEADER);
+        String jwt = request.getHeader("Authorization");
 
         // Bearer token
         if (jwt != null) {
@@ -44,7 +48,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
             }
 
             try {
-                SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+                SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
                 Claims claims = Jwts.parser()
                         .setSigningKey(key)
                         .build()

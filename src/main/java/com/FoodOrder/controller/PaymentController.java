@@ -26,10 +26,8 @@ public class PaymentController {
     }
 
     @GetMapping("/vn-pay-callback")
-    public ResponseEntity<PaymentResponse> payCallbackHandler(
-            HttpServletRequest request
-            , @RequestParam String status
-    ) {
+    public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
+        String status = request.getParameter("vnp_ResponseCode");
         if (status.equals("00")) {
             PaymentResponse paymentResponse = PaymentResponse.builder()
                     .code(status)

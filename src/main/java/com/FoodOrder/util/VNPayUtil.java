@@ -1,17 +1,19 @@
 package com.FoodOrder.util;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import lombok.Getter;
 
 @Component
 public class VNPayUtil {
@@ -19,20 +21,26 @@ public class VNPayUtil {
     @Getter
     @Value("${payment.vnPay.url}")
     private String vnp_PayUrl;
+
     @Value("${payment.vnPay.returnUrl}")
     private String vnp_ReturnUrl;
+
     @Value("${payment.vnPay.tmnCode}")
-    private String vnp_TmnCode ;
+    private String vnp_TmnCode;
+
     @Value("${payment.vnPay.secretKey}")
     private String secretKey;
+
     @Value("${payment.vnPay.version}")
     private String vnp_Version;
+
     @Value("${payment.vnPay.command}")
     private String vnp_Command;
+
     @Value("${payment.vnPay.orderType}")
     private String orderType;
 
-    public Map<String, String> getVNPayConfig(){
+    public Map<String, String> getVNPayConfig() {
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -66,9 +74,9 @@ public class VNPayUtil {
             String fieldName = (String) itr.next();
             String fieldValue = (String) fields.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                if(isEncode){
+                if (isEncode) {
                     sb.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
-                }else{
+                } else {
                     sb.append(fieldName);
                 }
                 sb.append("=");
@@ -79,9 +87,9 @@ public class VNPayUtil {
             }
         }
 
-        if(isEncode){
+        if (isEncode) {
             return sb.toString();
-        }else{
+        } else {
             return hmacSHA512(secretKey, sb.toString());
         }
     }

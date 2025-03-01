@@ -1,10 +1,12 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.response.PaymentResponse;
-import jakarta.servlet.http.HttpServletRequest;
-
 import java.io.UnsupportedEncodingException;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+import com.FoodOrder.response.PaymentResponse;
+
 public interface VNPayService {
-    public PaymentResponse createVNPayPayment(HttpServletRequest request) throws UnsupportedEncodingException;
+    public PaymentResponse createVNPayPayment(HttpServletRequest request, Long amount)
+            throws UnsupportedEncodingException;
 }

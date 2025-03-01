@@ -68,6 +68,7 @@ public class OrderServiceImp implements OrderService {
                 .restaurant(restaurant)
                 .items(orderItems)
                 .totalPrice(totalPrice)
+                .methodPayment(request.getMethodPayment())
                 .build();
         Order savedOrder = orderRepository.save(createOrder);
         restaurant.getOrders().add(savedOrder);

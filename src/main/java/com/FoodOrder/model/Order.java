@@ -40,4 +40,5 @@ public class Order {
 
     int totalItem;
     Long totalPrice;
+    String methodPayment;
 }

@@ -4,13 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import javax.crypto.SecretKey;
 
-import com.FoodOrder.model.InvalidatedToken;
-import com.FoodOrder.repository.InvalidatedTokenRepository;
-import com.FoodOrder.response.MessageResponse;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,15 +22,20 @@ import org.springframework.web.bind.annotation.*;
 
 import com.FoodOrder.config.JwtProvider;
 import com.FoodOrder.model.Cart;
+import com.FoodOrder.model.InvalidatedToken;
 import com.FoodOrder.model.USER_ROLE;
 import com.FoodOrder.model.User;
 import com.FoodOrder.repository.CartRepository;
+import com.FoodOrder.repository.InvalidatedTokenRepository;
 import com.FoodOrder.repository.UserRepository;
 import com.FoodOrder.request.LoginRequest;
 import com.FoodOrder.response.AuthResponse;
+import com.FoodOrder.response.MessageResponse;
 import com.FoodOrder.service.CustomerUserDetailsService;
 
-import javax.crypto.SecretKey;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
 @RestController
 @RequestMapping("/auth")
@@ -122,17 +122,16 @@ public class AuthController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<MessageResponse> logout(@RequestHeader("Authorization") String jwt){
+    public ResponseEntity<MessageResponse> logout(@RequestHeader("Authorization") String jwt) {
         jwt = jwt.substring(7);
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
-        Claims claims = Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
+        Claims claims =
+                Jwts.parser().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 
         Date expiryTime = claims.getExpiration();
 
-        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .token(jwt)
-                .expiryTime(expiryTime)
-                .build();
+        InvalidatedToken invalidatedToken =
+                InvalidatedToken.builder().token(jwt).expiryTime(expiryTime).build();
         invalidatedTokenRepository.save(invalidatedToken);
 
         MessageResponse response =

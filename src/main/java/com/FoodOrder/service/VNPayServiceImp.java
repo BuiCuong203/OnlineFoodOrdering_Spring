@@ -1,23 +1,29 @@
 package com.FoodOrder.service;
 
-import com.FoodOrder.response.PaymentResponse;
-import com.FoodOrder.util.VNPayUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.FoodOrder.response.PaymentResponse;
+import com.FoodOrder.util.VNPayUtil;
+
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class VNPayServiceImp implements VNPayService {
 
     @Autowired
     private VNPayUtil vnPayUtil;
 
     @Override
-    public PaymentResponse createVNPayPayment(HttpServletRequest request) throws UnsupportedEncodingException {
-        Long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
+    public PaymentResponse createVNPayPayment(HttpServletRequest request, Long amout)
+            throws UnsupportedEncodingException {
+        Long amount = amout * 100L;
         String IpAddr = vnPayUtil.getIpAddress(request);
         Map<String, String> vnp_Params = vnPayUtil.getVNPayConfig();
         vnp_Params.put("vnp_Amount", String.valueOf(amount));

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.crypto.SecretKey;
 
-import com.FoodOrder.repository.InvalidatedTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +19,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.FoodOrder.repository.InvalidatedTokenRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -43,7 +44,7 @@ public class JwtTokenValidator extends OncePerRequestFilter {
         if (jwt != null) {
             jwt = jwt.substring(7);
 
-            if(invalidatedTokenRepository.existsById(jwt)){
+            if (invalidatedTokenRepository.existsById(jwt)) {
                 throw new BadCredentialsException("invalid token......");
             }
 

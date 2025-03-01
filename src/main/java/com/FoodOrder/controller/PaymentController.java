@@ -23,16 +23,12 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> payCallbackHandler(HttpServletRequest request) {
         String status = request.getParameter("vnp_ResponseCode");
         if (status.equals("00")) {
-            PaymentResponse paymentResponse = PaymentResponse.builder()
-                    .code(status)
-                    .message("Success")
-                    .build();
+            PaymentResponse paymentResponse =
+                    PaymentResponse.builder().code(status).message("Success").build();
             return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
         } else {
-            PaymentResponse paymentResponse = PaymentResponse.builder()
-                    .code(status)
-                    .message("Fail")
-                    .build();
+            PaymentResponse paymentResponse =
+                    PaymentResponse.builder().code(status).message("Fail").build();
             return new ResponseEntity<>(paymentResponse, HttpStatus.BAD_GATEWAY);
         }
     }
